@@ -59,16 +59,6 @@ CURRENT_KEYBINDING=$(grep -Po 'keybinding\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME
 CURRENT_MULTI_BAR_MONITORS_STATUS=$(grep -Po 'multi-bar-monitors\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
 CURRENT_KEYBOARD_LAYOUTS=$(grep -Po 'keyboard-layouts\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
 
-CURRENT_BSP_BORDER_WIDTH=$(grep -Po 'bsp-border-width\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_WINDOW_GAP=$(grep -Po 'bsp-window-gap\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_SPLIT_RATIO=$(grep -Po 'bsp-split-ratio\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_BORDERLESS_MONOCLE=$(grep -Po 'bsp-borderless-monocle\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_GAPLESS_MONOCLE=$(grep -Po 'bsp-gapless-monocle\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_PADDINGLESS_MONOCLE=$(grep -Po 'bsp-paddingless-monocle\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_SINGLE_MONOCLE=$(grep -Po 'bsp-single-monocle\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_FOCUS_FOLLOWS_POINTER=$(grep -Po 'bsp-focus-follows-pointer\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_BSP_PRESEL_FEEDBACK=$(grep -Po 'bsp-presel-feedback\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
-CURRENT_ALL_WINDOWS_FLOAT=$(grep -Po 'all-windows-float\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
 
 CURRENT_RGB_KEYBOARD=$(grep -Po 'RGB-keyboard\s*=\s*\K.*' ${CONFIG_DIR}/${FILES_NAME}/exodia.conf)
 
@@ -96,17 +86,6 @@ RESTORE_USER_CONFIG () {
 	sed -i "s#keybinding = .*#keybinding = ${CURRENT_KEYBINDING}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
 	sed -i "s#multi-bar-monitors = .*#multi-bar-monitors = ${CURRENT_MULTI_BAR_MONITORS_STATUS}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
 	sed -i "s#keyboard-layouts = .*#keyboard-layouts = ${CURRENT_KEYBOARD_LAYOUTS}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-
-	sed -i "s#bsp-border-width = .*#bsp-border-width = ${CURRENT_BSP_BORDER_WIDTH}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-window-gap = .*#bsp-window-gap = ${CURRENT_BSP_WINDOW_GAP}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-split-ratio = .*#bsp-split-ratio = ${CURRENT_BSP_SPLIT_RATIO}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-borderless-monocle = .*#bsp-borderless-monocle = ${CURRENT_BSP_BORDERLESS_MONOCLE}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-gapless-monocle = .*#bsp-gapless-monocle = ${CURRENT_BSP_GAPLESS_MONOCLE}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-paddingless-monocle = .*#bsp-paddingless-monocle = ${CURRENT_BSP_PADDINGLESS_MONOCLE}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-single-monocle = .*#bsp-single-monocle = ${CURRENT_BSP_SINGLE_MONOCLE}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-focus-follows-pointer = .*#bsp-focus-follows-pointer = ${CURRENT_BSP_FOCUS_FOLLOWS_POINTER}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#bsp-presel-feedback = .*#bsp-presel-feedback = ${CURRENT_BSP_PRESEL_FEEDBACK}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
-	sed -i "s#all-windows-float = .*#all-windows-float = ${CURRENT_ALL_WINDOWS_FLOAT}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
 
 	sed -i "s#RGB-keyboard = .*#RGB-keyboard = ${CURRENT_RGB_KEYBOARD}#" ${CONFIG_DIR}/${FILES_NAME}/exodia.conf
 
