@@ -9,12 +9,6 @@
 #                                   #
 #####################################
 
-# you can run script with 2 arguments (your commit comment)
-# ./push.sh -m "yourCommit"
-#
-
-# a simple script to push your commits to GitHub #
-
 ## ------------ COLORS ------------ ##
 
 # Reset #
@@ -54,40 +48,146 @@ echo -e "${BCyan}#      Git Push Script      #${RESET_COLOR}"
 echo -e "${BCyan}#############################${RESET_COLOR}"
 
 # get branch name (e.g master, main, etc... ) #
-Branch=$(git branch --show-current)
-DEFAULT_COMMIT_MSG=$(git status -s)
+DEFAULT_BRANCH=$(git branch --show-current)
+TARGET_BRANCH=${DEFAULT_BRANCH}
 
-echo -e "\n${BRed}[*] Your Current Branch : ${BYellow}${Branch}${RESET_COLOR}"
+# get default commit message based on changes #
+DEFAULT_COMMIT_MSG=""
+
+# IFS -> Internal Field Separator
+# IFS  in Bash. It is a special variable that determines how Bash recognizes word boundaries.
+# By default, IFS is set to space, tab, and newline characters. 
+while IFS=$'\n' read -r -d '' line;
+    
+    do
+
+        status=$(echo "$line" | awk '{print $1}')
+        file=$(echo "$line" | awk '{$1=""; print $0}' | sed -e 's/^[ \t]*//')
+
+        case "$status" 
+            
+            in
+
+                D)
+                    # Deleted #
+                    DEFAULT_COMMIT_MSG+="    ${BRed}==> deleted : $file${RESET_COLOR}"
+                    DEFAULT_COMMIT_MSG+=""
+
+                    ;;
+
+                M)
+                    # Modified #
+                    DEFAULT_COMMIT_MSG+="    ${BCyan}==> modified : $file ${RESET_COLOR}"
+                    DEFAULT_COMMIT_MSG+=""
+
+                    ;;
+
+                \?\?)
+
+                    # Added #
+                    DEFAULT_COMMIT_MSG+="    ${BGreen}==> added : $file ${RESET_COLOR}"
+                    DEFAULT_COMMIT_MSG+=""
+
+                    ;;
+
+            esac
+        
+        # Add a newline character after each line #
+        DEFAULT_COMMIT_MSG+="\n"
+
+done < <(git status -s -z)
+
+# Remove the trailing comma and space, if any #
+DEFAULT_COMMIT_MSG=$(echo "$DEFAULT_COMMIT_MSG" | sed 's/, $//')
+
+# If no changes detected, use a default message #
+if [ -z "$DEFAULT_COMMIT_MSG" ];
+    
+    then
+        
+        DEFAULT_COMMIT_MSG="   ==> NO changes"
+
+fi
+
+echo -e "\n${BRed}[*] Your Current Branch : ${BYellow}${DEFAULT_BRANCH}${RESET_COLOR}"
 
 # get new updates if it founded #
 echo -e "\n${BPurple}[+] Updating Repo... \n${RESET_COLOR}"
 git pull 
 
-echo -e "\n${BPurple}[+] The new changes in the repo:- \n${RESET_COLOR}"
-git status -s
+echo -e "\n${BPurple}[+] The new changes in the repo:\n\n${BYellow}${DEFAULT_COMMIT_MSG}${RESET_COLOR}"
+
+# Loop through all arguments #
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -t|--target-branch)
+            TARGET_BRANCH="$2"
+            shift 2
+            ;;
+        -m|--commit-msg)
+            DEFAULT_COMMIT_MSG="$2"
+            shift 2
+            ;;
+        --create-pr)
+            CREATE_PR=true
+            TARGET_PR_BRANCH="$2"
+            shift 2
+            ;;
+        *)
+            # Ignore unrecognized options #
+            shift
+            ;;
+    esac
+done
+echo -e "\n${BRed}[+] Target Branch : ${BYellow}${TARGET_BRANCH}${RESET_COLOR}"
+if [ "${TARGET_BRANCH}" != "${DEFAULT_BRANCH}" ];
+    
+    then
+        
+        if git show-ref --verify --quiet "refs/heads/${TARGET_BRANCH}";
+            
+            then
+                
+                echo -e "${BBlue}  └──> Changing to the Target Branch: ${BYellow}${TARGET_BRANCH}${RESET_COLOR}"
+                git checkout ${TARGET_BRANCH}
+
+        else
+
+            echo -e "${BBlue}  └──> Creating and changing to the Target Branch: ${BYellow}${TARGET_BRANCH}${RESET_COLOR}"
+            git checkout -b ${TARGET_BRANCH}
+
+        fi
+
+fi
+
 
 echo -e "\n${BPurple}[+] Adding new changes to the repo... \n${RESET_COLOR}"
 git add --all .
 
-if [ "$1" == "-m" ];
+# Check for a custom commit message #
+if [ -n "${DEFAULT_COMMIT_MSG}" ];
     
     then
         
-        # commit changes#
         echo ""
-        git commit -m "$2"
-
-else
-
-    # use the default commit msg #
-    echo ""
-    git commit -m "updated/added ${DEFAULT_COMMIT_MSG}"
+        git commit -m "${DEFAULT_COMMIT_MSG}"
 
 fi
 
-# push to repo #
+# push to Target Branch #
 echo ""
-git push -u origin $Branch
+git push -u origin ${TARGET_BRANCH}
+
+# Check and create a pull request #
+if [ "${CREATE_PR}" == true ] && [ -n "${TARGET_PR_BRANCH}" ];
+    
+    then
+    
+        echo -e "\n${BBlue}[+] Creating a pull request from ${TARGET_BRANCH} to ${TARGET_PR_BRANCH}...${RESET_COLOR}"
+        gh pr create --base ${TARGET_PR_BRANCH} --head ${TARGET_BRANCH} --title "Pull Request: ${TARGET_BRANCH} to ${TARGET_PR_BRANCH}" --body "Please review and merge."
+
+fi
+
 
 # D O N E! #
 echo -e "\n${BGreen}[✔] D O N E \n${RESET_COLOR}"
