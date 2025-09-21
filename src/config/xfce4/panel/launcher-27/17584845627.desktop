@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=About Exodia OS
+Comment=About Exodia OS
+Exec=about-exodia-os
+Icon=exodia-yellow
+Type=Application
+Categories=System;
+X-XFCE-Source=file:///usr/share/applications/about-exodia-os.desktop
