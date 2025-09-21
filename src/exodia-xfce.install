@@ -77,16 +77,7 @@ INSTALL (){
 	echo -e ${BBlue}"   ==> copying ${BPurple}${FILES_NAME} ${BBlue}config files to the ${BPurple}config ${BBlue}directory." ${RESET_COLOR}
 	cp -rf ${CONFIG_DIR_SKEL}/${FILES_NAME} ${CONFIG_DIR}
 
-	echo -e ${BBlue}"   ==> ${BRed}disable ${BCyan}exodia-welcome ${BBlue}and ${BYellow}enable ${BCyan}exodia-assistant${BBlue}." ${RESET_COLOR}
-	sed -i 's/exodia-welcome/exodia-assistant/g' ${CONFIG_DIR}/${FILES_NAME}/bspwmrc
-
-	if [[ -f "${CONFIG_DIR}/${FILES_NAME}/exodia.conf" && ${RESTORE_USER_CONFIG_STATUS} == "true" ]]
-			
-			then
-
-				RESTORE_USER_CONFIG
-
-	fi
+	
 
     echo -e ${BBlue}"   ==> Granting permissions to the ${BPurple}${USER} ${BBlue}user." ${RESET_COLOR}
 	chown -R ${USER}:${GROUB} ${CONFIG_DIR}/${FILES_NAME}    
@@ -104,9 +95,6 @@ INSTALL (){
 
 	fi
 
-	echo -e ${Green}"\n[+] Reloading ${BCyan}bspwm${Green} Configurations." ${RESET_COLOR}
-	bspc wm --restart
-
 }
 
 # MAIN FUNCTION #
@@ -120,31 +108,8 @@ RUN_MAIN (){
 
 	else
 
-		if [[ ! -d "${CONFIG_DIR}/${FILES_NAME}" ]];
-			
-			then
-				
-				INSTALL
-
-		elif [[ ! -f "${CONFIG_DIR}/${FILES_NAME}/exodia.conf" ]];
-			
-			then
-				
-				BACKUP
-				INSTALL
-		
-		elif [[ -f "${CONFIG_DIR}/${FILES_NAME}/exodia.conf" && ${AUTO_UPDATE_STATUS} == "true" ]]
-			
-			then
-				
-				BACKUP
-				INSTALL
-				
-		else
-
-			echo -e ${Green}"\n[*] The New Config Files Located in ${BPurple}${CONFIG_DIR_SKEL}/${FILES_NAME}${Green} directory.\n" ${RESET_COLOR}
-				
-		fi
+		BACKUP
+		INSTALL
 
 	fi
 
