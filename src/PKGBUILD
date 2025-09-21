@@ -4,7 +4,7 @@
 
 pkgname='exodia-xfce'
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='xfce config for Exodia OS'
 arch=('any')
 url='https://github.com/Exodia-OS/exodia-xfce'
