@@ -1,0 +1,25 @@
+#
+# Maintainer: Mahmoud Mohamed (00xWolf) <mmsaeed509@gmail.com> , <https://github.com/mmsaeed509>
+#
+
+pkgname='exodia-xfce'
+pkgver=1.0
+pkgrel=1
+pkgdesc='xfce config for Exodia OS'
+arch=('any')
+url='https://github.com/Exodia-OS/exodia-xfce'
+license=('GPL-3.0')
+depends=('xfce4' 'xfce4-goodies')
+install=${pkgname}.install
+
+
+package() {
+
+    local SKEL_DIR="$pkgdir"/etc/skel/.config
+    mkdir -p ${SKEL_DIR}
+
+    # Copy Configs
+	cp -r ${srcdir}/xfce4 ${SKEL_DIR}
+
+
+}
